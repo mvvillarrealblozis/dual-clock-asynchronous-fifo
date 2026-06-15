@@ -1,0 +1,59 @@
+# Simulation outputs
+*.vcd
+*.lxt
+*.fst
+*.dump
+
+# Icarus Verilog compiled output
+*.vvp
+*.out
+
+# Synopsys VCS
+*.daidir/
+simv
+simv.daidir/
+ucli.key
+vc_hdrs.h
+
+# Cadence Xcelium
+xcelium.d/
+*.shm/
+*.trn
+*.dsn
+*.err
+*.log
+*.diag
+
+# Mentor QuestaSim / ModelSim
+work/
+transcript
+vsim.wlf
+*.wlf
+
+# Yosys synthesis outputs
+*.json
+*.blif
+*.edif
+synth/
+
+# OpenROAD / OpenLane outputs
+runs/
+*.def
+*.lef
+*.gds
+*.odb
+
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Waveform viewer configs
+*.gtkw
