@@ -8,7 +8,7 @@ A parameterizable dual-clock asynchronous FIFO implemented in SystemVerilog for 
 
 Data written into the FIFO on the write clock domain (`clk_w`) is safely transferred to the read clock domain (`clk_r`) without direct signal crossing. Instead, write and read pointers are converted to Gray code, which changes one bit per increment, and passed through two-flop synchronizer chains before crossing the clock boundary. This eliminates metastability risk and ensures CDC compliance.
 
-![Block Diagram](docs/block_diagram.png)
+![Block Diagram](docs/Async_Fifo.png)
 
 ### Key Design Decisions
 
