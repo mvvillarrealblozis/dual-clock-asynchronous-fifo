@@ -9,7 +9,7 @@ module wr_ptr_logic #(
     output logic [ADDR_WIDTH-1:0] waddr,
     output logic [ADDR_WIDTH:0] gray_write_ptr
 );  
-    // We use an extra bit for the pointer to be able to if the fifo is full/empty
+    // We use an extra bit for the pointer to be able to tell if the fifo is full/empty
     // Without it, there would be a case where the write and read pointers would be at the 
     // same address but there would be no way to tell if its full or empty. Using an extra bit
     // we can tell when one of the pointers has "lapped" the other. 
