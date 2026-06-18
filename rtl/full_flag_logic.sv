@@ -14,16 +14,7 @@ module full_flag_logic #(
         There is no need to convert the gray to binary because we are checking
         for a specific bit pattern that is consistent across all gray code values.
     */
-    always_comb begin
-        if (
-            gray_write_ptr[ADDR_WIDTH] != gray_read_ptr_sync_w[ADDR_WIDTH] && 
-            gray_write_ptr[ADDR_WIDTH-1] != gray_read_ptr_sync_w[ADDR_WIDTH-1] &&
-            gray_write_ptr[ADDR_WIDTH-2:0] == gray_read_ptr_sync_w[ADDR_WIDTH-2:0]
-        ) begin
-            full = 1;
-        end else begin
-            full = 0;
-        end
-    end
-
+    assign full = (gray_write_ptr[ADDR_WIDTH] != gray_read_ptr_sync_w[ADDR_WIDTH]) && 
+            (gray_write_ptr[ADDR_WIDTH-1] != gray_read_ptr_sync_w[ADDR_WIDTH-1]) &&
+            (gray_write_ptr[ADDR_WIDTH-2:0] == gray_read_ptr_sync_w[ADDR_WIDTH-2:0]);
 endmodule
