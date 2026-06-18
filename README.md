@@ -37,8 +37,8 @@ Data written into the FIFO on the write clock domain (`clk_w`) is safely transfe
 - [x] `rtl/bin2gray.sv`: parameterizable binary-to-Gray code converter
 - [x] `rtl/fifo_mem.sv`: dual-port memory array (synchronous write, asynchronous read)
 - [x] `rtl/wr_ptr_logic.sv`: write pointer register with Gray code output
-- [ ] `rtl/rd_ptr_logic.sv`: read pointer register with Gray code output
-- [ ] `rtl/sync_2ff.sv`: two-flop synchronizer for CDC crossing
+- [x] `rtl/rd_ptr_logic.sv`: read pointer register with Gray code output
+- [x] `rtl/sync_2ff.sv`: two-flop synchronizer for CDC crossing
 - [ ] `rtl/async_fifo_top.sv`: top-level integration
 
 ### Verification
