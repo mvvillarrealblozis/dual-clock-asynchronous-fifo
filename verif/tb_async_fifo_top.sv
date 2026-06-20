@@ -42,7 +42,10 @@ module tb_async_fifo_top;
         .empty  (vif_inst.empty)
     );
 
-
+	initial begin
+    	$dumpfile("dump.vcd");
+    	$dumpvars(0, tb_async_fifo_top);
+	end
 
     // Write clock — 10ns period
     initial clk_w = 0;

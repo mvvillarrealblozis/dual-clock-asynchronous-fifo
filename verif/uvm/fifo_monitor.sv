@@ -20,6 +20,7 @@ class fifo_monitor extends uvm_monitor;
             // Block 1 watches clk_w
             forever begin
                 @(posedge vif.clk_w);
+                #2;
                 if (vif.w_en) begin
                     fifo_seq_item tr;
                     tr = fifo_seq_item::type_id::create("tr");
@@ -33,6 +34,7 @@ class fifo_monitor extends uvm_monitor;
             // Block 2 watches clk_r
             forever begin
                 @(posedge vif.clk_r);
+                #2;
                 if (vif.r_en) begin
                     fifo_seq_item tr;
                     tr = fifo_seq_item::type_id::create("tr");
