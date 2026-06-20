@@ -27,7 +27,7 @@ Data written into the FIFO on the write clock domain (`clk_w`) is safely transfe
 |---|---|---|
 | `DATA_WIDTH` | Bit width of each FIFO entry | 8 |
 | `ADDR_WIDTH` | Bit width of the pointer address | 4 |
-| `DEPTH` | Number of entries — derived as `2**ADDR_WIDTH` | 16 |
+| `DEPTH` | Number of entries - derived as `2**ADDR_WIDTH` | 16 |
 
 > **Note:** `DEPTH` must be a power of 2. Binary pointers wrap to zero through natural overflow at power-of-2 boundaries, and Gray code only preserves its Hamming distance 1 property, including at wraparound, for sequences of length 2^N.
 
@@ -93,7 +93,7 @@ UVM_FATAL   :    0
 
 *Write domain (`clk_w`, `w_en`, `wdata`) and read domain (`clk_r`, `r_en`, `rdata`) operating independently, with `empty`/`full` flags correctly tracking FIFO state across the clock boundary.*
 
-**Engineering note — race condition debugging:** Initial UVM runs produced shuffled, offset data that looked like corruption. Root cause was a chain of race conditions between the DUT's `always_ff` blocks, the UVM driver, and the UVM monitor, all reacting to the same clock edges with no guaranteed execution order between independent processes. Resolved by staggering testbench timing relative to each clock edge (DUT samples at the edge -> driver updates shortly after -> monitor samples after that), confirmed by tracing internal pointer registers (`wptr`, `rptr`) in waveform to isolate the bug to testbench timing rather than the RTL itself.
+**Engineering note - race condition debugging:** Initial UVM runs produced shuffled, offset data that looked like corruption. Root cause was a chain of race conditions between the DUT's `always_ff` blocks, the UVM driver, and the UVM monitor, all reacting to the same clock edges with no guaranteed execution order between independent processes. Resolved by staggering testbench timing relative to each clock edge (DUT samples at the edge -> driver updates shortly after -> monitor samples after that), confirmed by tracing internal pointer registers (`wptr`, `rptr`) in waveform to isolate the bug to testbench timing rather than the RTL itself.
 
 ---
 
@@ -101,8 +101,8 @@ UVM_FATAL   :    0
 
 ### Requirements
 
-- [Icarus Verilog](http://iverilog.icarus.com/) (with `-g2012` flag for SystemVerilog) — RTL and directed testbench
-- [GTKWave](http://gtkwave.sourceforge.net/) — waveform viewing
+- [Icarus Verilog](http://iverilog.icarus.com/) (with `-g2012` flag for SystemVerilog), RTL and directed testbench
+- [GTKWave](http://gtkwave.sourceforge.net/) - waveform viewing
 - [EDA Playground](https://www.edaplayground.com) with Synopsys VCS + UVM 1.2 | UVM environment
 
 ### Run Gray Code Testbench (Icarus)
@@ -163,7 +163,7 @@ async_fifo/
 │   ├── full_flag_logic.sv
 │   ├── empty_flag_logic.sv
 │   └── async_fifo_top.sv
-├── verif/                     # Verification — non-synthesizable
+├── verif/                     # Verification - non-synthesizable
 │   ├── tb_bin2gray.sv
 │   ├── tb_async_fifo_top.sv
 │   └── uvm/
