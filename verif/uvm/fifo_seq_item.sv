@@ -3,21 +3,23 @@ class fifo_seq_item #(
 ) extends uvm_sequence_item;
     `uvm_object_utils(fifo_seq_item)
 
-
     rand logic [DATA_WIDTH-1:0] wdata;
     rand logic w_en;
     rand logic r_en;
-
     logic [DATA_WIDTH-1:0] rdata;
     logic full;
     logic empty;
 
     constraint valid_op {
-        w_en != r_en;
+        {w_en, r_en} dist {
+            2'b01 := 30,  // read only
+            2'b10 := 30,  // write only
+            2'b11 := 30,  // concurrent read+write
+            2'b00 := 10   // idle
+        };
     }
 
     function new(string name = "fifo_seq_item");
         super.new(name);
-    endfunction 
-
+    endfunction
 endclass
