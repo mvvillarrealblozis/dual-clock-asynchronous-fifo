@@ -33,25 +33,6 @@ Data written into the FIFO on the write clock domain (`clk_w`) is safely transfe
 
 ---
 
-## Project Status
-
-### RTL
-- [x] `rtl/bin2gray.sv`: parameterizable binary-to-Gray code converter
-- [x] `rtl/fifo_mem.sv`: dual-port memory array (synchronous write, asynchronous read)
-- [x] `rtl/wr_ptr_logic.sv`: write pointer register with Gray code output
-- [x] `rtl/rd_ptr_logic.sv`: read pointer register with Gray code output
-- [x] `rtl/sync_2ff.sv`: two-flop synchronizer for CDC crossing
-- [x] `rtl/full_flag_logic.sv`: full flag derived from Gray-coded pointer bit pattern
-- [x] `rtl/empty_flag_logic.sv`: empty flag derived from Gray-coded pointer equality
-- [x] `rtl/async_fifo_top.sv`: top-level integration
-
-### Verification
-- [x] `verif/tb_bin2gray.sv`: exhaustive Gray code property testbench
-- [x] `verif/tb_async_fifo_top.sv`: UVM top-level testbench
-- [x] `verif/uvm/`: full UVM 1.2 environment (sequencer, driver, monitor, scoreboard, agent, env, test, sequence)
-
----
-
 ## Verification Approach
 
 ### Directed Testbench - `tb_bin2gray`
@@ -93,7 +74,7 @@ UVM_FATAL   :    0
 
 *Write domain (`clk_w`, `w_en`, `wdata`) and read domain (`clk_r`, `r_en`, `rdata`) operating independently, with `empty`/`full` flags correctly tracking FIFO state across the clock boundary.*
 
-**Engineering note - race condition debugging:** Initial UVM runs produced shuffled, offset data that looked like corruption. Root cause was a chain of race conditions between the DUT's `always_ff` blocks, the UVM driver, and the UVM monitor, all reacting to the same clock edges with no guaranteed execution order between independent processes. Resolved by staggering testbench timing relative to each clock edge (DUT samples at the edge -> driver updates shortly after -> monitor samples after that), confirmed by tracing internal pointer registers (`wptr`, `rptr`) in waveform to isolate the bug to testbench timing rather than the RTL itself.
+**Race condition debugging:** Initial UVM runs produced shuffled, offset data that looked like corruption. Root cause was a chain of race conditions between the DUT's `always_ff` blocks, the UVM driver, and the UVM monitor, all reacting to the same clock edges with no guaranteed execution order between independent processes. Resolved by staggering testbench timing relative to each clock edge (DUT samples at the edge -> driver updates shortly after -> monitor samples after that), confirmed by tracing internal pointer registers (`wptr`, `rptr`) in waveform to isolate the bug to testbench timing rather than the RTL itself.
 
 ---
 
