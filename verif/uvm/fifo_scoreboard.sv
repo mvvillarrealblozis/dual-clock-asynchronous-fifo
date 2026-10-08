@@ -16,26 +16,42 @@ class fifo_scoreboard #(
         pass_count = 0;
         fail_count = 0;
     endfunction
+	
+    int write_while_full = 0;
+    int read_while_empty = 0;
 
     function void write(fifo_seq_item tr);
-        // Case 1: write
         if (tr.w_en) begin
-            ref_queue.push_back(tr.wdata);
-        // Case 2: read
-        end else if (tr.r_en) begin
-            // Queue empty 
-            if (ref_queue.size() == 0) begin
-                `uvm_error("QUEUE_EMPTY", "Error popping from queue, queue is empty")
+            if (tr.full) begin
+                write_while_full++;
+                `uvm_info("WR_FULL", "Write attempted while full: correctly dropped", UVM_MEDIUM)
+            end else
+                ref_queue.push_back(tr.wdata);
+        end
+        if (tr.r_en) begin
+            if (tr.empty) begin
+                read_while_empty++;
+                `uvm_info("RD_EMPTY", "Read attempted while empty: correctly ignored", UVM_MEDIUM)
+            end else if (ref_queue.size() == 0) begin
+                `uvm_error("UNDERFLOW", "DUT returned data but model queue is empty")
             end else begin
                 expected = ref_queue.pop_front();
-                if (expected == tr.rdata) begin
-                    pass_count = pass_count + 1;
-                    `uvm_info("PASS", $sformatf("Match: expected=%0d actual=%0d", expected, tr.rdata), UVM_LOW)
-                end else begin
-                    fail_count = fail_count + 1;
-                    `uvm_error("FAIL", $sformatf("Mismatch: expected=%0d actual=%0d", expected, tr.rdata))
+                if (expected == tr.rdata) pass_count++;
+                else begin
+                    fail_count++;
+                    `uvm_error("FAIL", $sformatf("Mismatch: expected=%0h actual=%0h", expected, tr.rdata))
                 end
             end
         end
-    endfunction 
+    endfunction
+
+    function void report_phase(uvm_phase phase);
+        if (fail_count != 0)        `uvm_error("REPORT", $sformatf("%0d data mismatches", fail_count))
+        if (pass_count == 0)        `uvm_error("REPORT", "No reads were checked")
+        if (ref_queue.size() != 0)  `uvm_error("REPORT", $sformatf("%0d entries never read out", ref_queue.size()))
+        if (write_while_full == 0)  `uvm_error("REPORT", "Never exercised write-while-full")
+        if (read_while_empty == 0)  `uvm_error("REPORT", "Never exercised read-while-empty")
+        `uvm_info("REPORT", $sformatf("pass=%0d fail=%0d wr_while_full=%0d rd_while_empty=%0d",
+                    pass_count, fail_count, write_while_full, read_while_empty), UVM_LOW)
+    endfunction
 endclass 
